@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwccky77v7knf"]
+
+[ext_resource type="Texture2D" uid="uid://bgao21le3owl6" path="res://art/other/BrickPlatform.png" id="1_iuk07"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_125fg"]
+size = Vector2(64, 3)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_nyjlm"]
+blend_mode = 1
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_dbjey"]
+polygon = PackedVector2Array(32, 3, 32, -4, -32, -4, -32, 3)
+
+[node name="Platform" type="StaticBody2D"]
+collision_layer = 5
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_125fg")
+one_way_collision = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_iuk07")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+material = SubResource("CanvasItemMaterial_nyjlm")
+position = Vector2(0, 0.5)
+occluder = SubResource("OccluderPolygon2D_dbjey")

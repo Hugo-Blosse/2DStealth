@@ -1,0 +1,730 @@
+[gd_scene load_steps=34 format=3 uid="uid://djgjih4g38pj1"]
+
+[ext_resource type="Script" path="res://Player/Player.gd" id="1_2bcrj"]
+[ext_resource type="Shader" path="res://Player/Player.gdshader" id="1_5o0o7"]
+[ext_resource type="SpriteFrames" uid="uid://b3mtq73l4f60v" path="res://Player/prames.tres" id="2_5x1wj"]
+[ext_resource type="Script" path="res://Player/PlayerStateMachine.gd" id="3_nq631"]
+[ext_resource type="Script" path="res://Player/PlayerState.gd" id="4_eork4"]
+[ext_resource type="Texture2D" uid="uid://bk7j2jwo6lbe3" path="res://art/player_art/VoidCharacterDeath2_teleport.png" id="4_l0rvi"]
+[ext_resource type="Script" path="res://Player/Idle.gd" id="5_bxm3t"]
+[ext_resource type="Script" path="res://Player/Dead.gd" id="5_wawdd"]
+[ext_resource type="Script" path="res://Player/Run.gd" id="6_i7bmq"]
+[ext_resource type="Script" path="res://Player/Jump.gd" id="7_dw3ei"]
+[ext_resource type="Script" path="res://Player/Dodge.gd" id="9_iq6u6"]
+[ext_resource type="Script" path="res://Player/Attack.gd" id="11_0jvcm"]
+[ext_resource type="Script" path="res://Player/Fall.gd" id="11_w7vmy"]
+[ext_resource type="Script" path="res://Player/LightProjectile.gd" id="13_7q1om"]
+[ext_resource type="Texture2D" uid="uid://dyyusrh2ku8k3" path="res://art/player_art/TeleportPortal.png" id="14_7bfvk"]
+[ext_resource type="Script" path="res://Player/EndState.gd" id="15_la4k3"]
+[ext_resource type="AudioStream" uid="uid://chim00em3ppjd" path="res://art/sounds/Teleport.wav" id="16_nxunm"]
+[ext_resource type="AudioStream" uid="uid://ch5evcolxn1lu" path="res://art/sounds/PlayerHit.wav" id="17_3hm5l"]
+[ext_resource type="AudioStream" uid="uid://ccm4nq5x2s534" path="res://art/sounds/Attack.wav" id="18_6rmr2"]
+[ext_resource type="AudioStream" uid="uid://dglm1uwer25sx" path="res://art/sounds/Jump.wav" id="19_uhkcg"]
+[ext_resource type="AudioStream" uid="uid://dxg6lx6i57lc3" path="res://art/sounds/VoidDeath.wav" id="19_un2cv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4jpqp"]
+shader = ExtResource("1_5o0o7")
+shader_parameter/damaged = false
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_frct4"]
+radius = 5.0
+
+[sub_resource type="GDScript" id="GDScript_hqfx3"]
+script/source = "extends PlayerState
+
+var random = RandomNumberGenerator.new()
+
+func enter() -> void:
+	player.animated_sprite.material.set(\"shader_parameter/damaged\", true)
+	%PlayerHurtSound.play()
+
+func exit() -> void:
+	player.remote_transform.position = Vector2(1,1)
+	player.animated_sprite.material.set(\"shader_parameter/damaged\", false)
+
+func physics_update(_delta):
+	if !%KnockbackTimer.is_stopped():
+		player.velocity.y = player.knockback_velocity_y
+		player.velocity.x = player.knockback_velocity_y * player.knockback_position
+		player.remote_transform.position = Vector2(random.randf_range(-1,1) * 20, random.randf_range(-1,1) * 20)
+	else:
+		player.velocity = Vector2.ZERO
+		emit_signal(\"transition\", \"Idle\")
+"
+
+[sub_resource type="Gradient" id="Gradient_vvt7s"]
+offsets = PackedFloat32Array(0, 0.668831)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ythpb"]
+gradient = SubResource("Gradient_vvt7s")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_bflqr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("teleport_right_sprited:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport_Right_Light:enabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Teleport_Right_Light:texture_scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TeleportLeft/teleport_left_sprited:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TeleportLeft/Teleport_Left_Light:texture_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../TeleportLeft/Teleport_Left_Light:enabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("%TeleportRight/../DeathTeleport:frame")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("%DeathTeleport:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_k7n6q"]
+resource_name = "death"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("%TeleportRight/../DeathTeleport:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("%TeleportRight/../DeathTeleport:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_q2d87"]
+resource_name = "teleport_left_end"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("teleport_right_sprited:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport_Right_Light:texture_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.832, 0.664, 0.496, 0.328, 0.16]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Teleport_Right_Light:enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TeleportLeft/teleport_left_sprited:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TeleportLeft/Teleport_Left_Light:texture_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../TeleportLeft/Teleport_Left_Light:enabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_byyu2"]
+resource_name = "teleport_left_start"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("teleport_right_sprited:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport_Right_Light:texture_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Teleport_Right_Light:enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TeleportLeft/teleport_left_sprited:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [5, 4, 3, 2, 1, 0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TeleportLeft/Teleport_Left_Light:texture_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.16, 0.33, 0.5, 0.66, 0.83, 1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../TeleportLeft/Teleport_Left_Light:enabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_fj7sy"]
+resource_name = "teleport_right_end"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("teleport_right_sprited:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport_Right_Light:texture_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Teleport_Right_Light:enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TeleportLeft/teleport_left_sprited:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TeleportLeft/Teleport_Left_Light:texture_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.83, 0.66, 0.5, 0.33, 0.16]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../TeleportLeft/Teleport_Left_Light:enabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_bne7s"]
+resource_name = "teleport_right_start"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("teleport_right_sprited:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [5, 4, 3, 2, 1, 0, 6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Teleport_Right_Light:texture_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.16, 0.33, 0.5, 0.67, 0.83, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Teleport_Right_Light:enabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TeleportLeft/teleport_left_sprited:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TeleportLeft/Teleport_Left_Light:texture_scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.16]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../TeleportLeft/Teleport_Left_Light:enabled")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_68jwg"]
+_data = {
+"RESET": SubResource("Animation_bflqr"),
+"death": SubResource("Animation_k7n6q"),
+"teleport_left_end": SubResource("Animation_q2d87"),
+"teleport_left_start": SubResource("Animation_byyu2"),
+"teleport_right_end": SubResource("Animation_fj7sy"),
+"teleport_right_start": SubResource("Animation_bne7s")
+}
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 257
+collision_mask = 265
+script = ExtResource("1_2bcrj")
+dodge_cooldown_time = 1.0
+
+[node name="DeathTeleport" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("4_l0rvi")
+hframes = 8
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_4jpqp")
+position = Vector2(-32, -32)
+sprite_frames = ExtResource("2_5x1wj")
+animation = &"teleport_1"
+frame = 5
+frame_progress = 1.0
+centered = false
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_frct4")
+
+[node name="Weapon" type="Area2D" parent="."]
+
+[node name="PlayerAttackHitbox" type="CollisionPolygon2D" parent="Weapon"]
+position = Vector2(0, 2)
+polygon = PackedVector2Array(1, 11, 17, 11, 18, -3, 13, -16, 3, -23, -6, -21, -7, -16)
+disabled = true
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
+script = ExtResource("3_nq631")
+current_state = NodePath("Idle")
+
+[node name="PlayerState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("4_eork4")
+
+[node name="Dead" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_wawdd")
+
+[node name="Idle" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("5_bxm3t")
+
+[node name="Run" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("6_i7bmq")
+
+[node name="Jump" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("7_dw3ei")
+
+[node name="Dodge" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("9_iq6u6")
+
+[node name="Damaged" type="Node" parent="PlayerStateMachine"]
+script = SubResource("GDScript_hqfx3")
+
+[node name="Attack" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("11_0jvcm")
+
+[node name="Fall" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("11_w7vmy")
+
+[node name="LightProjectile" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("13_7q1om")
+
+[node name="End" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("15_la4k3")
+
+[node name="BufferTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.15
+one_shot = true
+
+[node name="DodgeTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.5
+one_shot = true
+
+[node name="InvulnerabilityTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.5
+one_shot = true
+
+[node name="KnockbackTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+
+[node name="LightProjectileTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 5.0
+one_shot = true
+
+[node name="ZoomOutTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.5
+one_shot = true
+
+[node name="TeleportRight" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(100, -1)
+collision_layer = 65
+collision_mask = 65
+
+[node name="Teleport_Right_Light" type="PointLight2D" parent="TeleportRight"]
+position = Vector2(0, 1)
+enabled = false
+color = Color(0.807843, 0.568627, 1, 1)
+range_layer_min = -1
+shadow_color = Color(0.133333, 0, 0.211765, 1)
+texture = SubResource("GradientTexture2D_ythpb")
+texture_scale = 0.16
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TeleportRight"]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_frct4")
+
+[node name="teleport_right_sprited" type="Sprite2D" parent="TeleportRight"]
+texture = ExtResource("14_7bfvk")
+hframes = 7
+frame = 6
+
+[node name="TeleportLeft" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-100, -1)
+collision_layer = 65
+collision_mask = 65
+
+[node name="Teleport_Left_Light" type="PointLight2D" parent="TeleportLeft"]
+position = Vector2(0, 1)
+enabled = false
+color = Color(0.807843, 0.568627, 1, 1)
+range_layer_min = -1
+shadow_color = Color(0.133333, 0, 0.211765, 1)
+texture = SubResource("GradientTexture2D_ythpb")
+texture_scale = 0.16
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TeleportLeft"]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_frct4")
+
+[node name="teleport_left_sprited" type="Sprite2D" parent="TeleportLeft"]
+texture = ExtResource("14_7bfvk")
+hframes = 7
+frame = 6
+
+[node name="Light" type="PointLight2D" parent="."]
+scale = Vector2(3, 3)
+color = Color(0.807843, 0.568627, 1, 1)
+energy = 0.6
+range_layer_min = -1
+shadow_filter = 1
+shadow_filter_smooth = 3.0
+texture = SubResource("GradientTexture2D_ythpb")
+
+[node name="Shadow" type="PointLight2D" parent="."]
+scale = Vector2(3, 3)
+color = Color(0.807843, 0.568627, 1, 1)
+energy = 0.39
+range_layer_min = -1
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 3.0
+texture = SubResource("GradientTexture2D_ythpb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("../TeleportRight")
+libraries = {
+"": SubResource("AnimationLibrary_68jwg")
+}
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
+[node name="TeleportSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("16_nxunm")
+
+[node name="PlayerHurtSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("17_3hm5l")
+bus = &"SFX"
+
+[node name="PlayerAttackSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("18_6rmr2")
+bus = &"SFX"
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("19_un2cv")
+bus = &"SFX"
+
+[node name="PlayerJumpSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("19_uhkcg")
+bus = &"SFX"
+
+[connection signal="state_change" from="." to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="transition" from="PlayerStateMachine/PlayerState" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Dead" to="." method="_on_animation_change"]
+[connection signal="animation_change" from="PlayerStateMachine/Idle" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Idle" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Run" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Run" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Jump" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Jump" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Dodge" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Dodge" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Damaged" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Damaged" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Attack" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Attack" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/Fall" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/Fall" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="PlayerStateMachine/LightProjectile" to="." method="_on_animation_change"]
+[connection signal="transition" from="PlayerStateMachine/LightProjectile" to="PlayerStateMachine" method="on_child_transitioned"]
+[connection signal="timeout" from="ZoomOutTimer" to="PlayerStateMachine/LightProjectile" method="_on_zoom_out_timer_timeout"]

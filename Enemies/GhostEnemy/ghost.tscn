@@ -1,0 +1,286 @@
+[gd_scene load_steps=40 format=3 uid="uid://b731ohquu16si"]
+
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/ghost.gd" id="1_bpihg"]
+[ext_resource type="Texture2D" uid="uid://d2oueeqn3igo" path="res://art/enemies/GhostIdle.png" id="1_w0qw7"]
+[ext_resource type="Texture2D" uid="uid://dtyrvpsgm0ouv" path="res://art/enemies/GhostAttack.png" id="2_vdgo7"]
+[ext_resource type="PackedScene" uid="uid://cmgkcsv7njqp3" path="res://Enemies/GhostEnemy/velocity_component.tscn" id="4_nf7mo"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/velocity_component.gd" id="5_f5l4p"]
+[ext_resource type="PackedScene" uid="uid://cd54xaw2kx1kw" path="res://state_machine.tscn" id="7_kjbxm"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyIdleState.gd" id="8_0ur6e"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyAttackState.gd" id="9_r6n5i"]
+[ext_resource type="PackedScene" uid="uid://dtir7v7n4hy2q" path="res://Player/health_component.tscn" id="10_hekg3"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyAttackStartState.gd" id="10_r8ag2"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyBackState.gd" id="11_lxp6n"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyStunState.gd" id="12_14t7k"]
+[ext_resource type="Shader" path="res://Enemies/GhostEnemy/ghost.gdshader" id="12_wjx7s"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyMoveState.gd" id="13_df10u"]
+[ext_resource type="Script" path="res://Enemies/GhostEnemy/GhostEnemyWaitState.gd" id="14_ug44q"]
+[ext_resource type="AudioStream" uid="uid://dffioi5cq7pmc" path="res://art/sounds/GhostHit.wav" id="15_643q0"]
+[ext_resource type="AudioStream" uid="uid://cqckk5s74rtib" path="res://art/sounds/GhostAttack.wav" id="15_wyh2d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vpvta"]
+resource_local_to_scene = true
+shader = ExtResource("12_wjx7s")
+shader_parameter/stunned = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfcqa"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8oyg5"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_suqr5"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7m58"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ko70"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w2x8b"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdmdc"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kd1fe"]
+atlas = ExtResource("2_vdgo7")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ki7ov"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2e144"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rjk6y"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vnsnx"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kr7or"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0xje"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j57kx"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6idk"]
+atlas = ExtResource("1_w0qw7")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mht8n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfcqa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8oyg5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_suqr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7m58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ko70")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w2x8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mdmdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kd1fe")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ki7ov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2e144")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rjk6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnsnx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kr7or")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0xje")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j57kx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6idk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3m8wb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_givme"]
+radius = 109.895
+
+[sub_resource type="Gradient" id="Gradient_mwxil"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_q16c1"]
+gradient = SubResource("Gradient_mwxil")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="GhostEnemy" type="CharacterBody2D" node_paths=PackedStringArray("velocity_component")]
+motion_mode = 1
+script = ExtResource("1_bpihg")
+damage = 1
+velocity_component = NodePath("VelocityComponent")
+
+[node name="VelocityComponent" parent="." instance=ExtResource("4_nf7mo")]
+script = ExtResource("5_f5l4p")
+speed = 125.0
+
+[node name="GhostAnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_vpvta")
+sprite_frames = SubResource("SpriteFrames_mht8n")
+autoplay = "default"
+flip_h = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_3m8wb")
+disabled = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(0, -2)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitbox"]
+position = Vector2(9.53674e-07, 1.32917)
+scale = Vector2(1, 1.03819)
+polygon = PackedVector2Array(-9, -12, -9, 12, 8, 12, 7, -13, -1, -24)
+
+[node name="Detection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection"]
+shape = SubResource("CircleShape2D_givme")
+
+[node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("7_kjbxm")]
+current_state = NodePath("GhostEnemyIdle")
+
+[node name="GhostEnemyIdle" type="Node" parent="StateMachine"]
+script = ExtResource("8_0ur6e")
+
+[node name="GhostEnemyAttack" type="Node" parent="StateMachine"]
+script = ExtResource("9_r6n5i")
+
+[node name="GhostEnemyAttackStart" type="Node" parent="StateMachine"]
+script = ExtResource("10_r8ag2")
+
+[node name="GhostEnemyBack" type="Node" parent="StateMachine"]
+script = ExtResource("11_lxp6n")
+
+[node name="GhostEnemyStun" type="Node" parent="StateMachine"]
+script = ExtResource("12_14t7k")
+
+[node name="StunAnimationTimer" type="Timer" parent="StateMachine/GhostEnemyStun"]
+unique_name_in_owner = true
+wait_time = 0.25
+
+[node name="GhostEnemyMove" type="Node" parent="StateMachine"]
+script = ExtResource("13_df10u")
+
+[node name="GhostEnemyWait" type="Node" parent="StateMachine"]
+script = ExtResource("14_ug44q")
+
+[node name="Attack_Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Attack_Hitbox"]
+polygon = PackedVector2Array(-9, -12, -9, 12, 8, 12, 7, -13, -1, -24)
+
+[node name="HealthComponent" parent="." instance=ExtResource("10_hekg3")]
+wait_time = 3
+
+[node name="GhostShadow" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_color = Color(0, 0.0901961, 0, 0)
+texture = SubResource("GradientTexture2D_q16c1")
+
+[node name="GhostLight" type="PointLight2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+range_layer_min = -1
+shadow_color = Color(0.160784, 0.345098, 0, 1)
+texture = SubResource("GradientTexture2D_q16c1")
+
+[node name="LightCheckTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="AttackStart" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("15_wyh2d")
+bus = &"SFX"
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("15_643q0")
+bus = &"SFX"
+
+[connection signal="damage_taken" from="." to="HealthComponent" method="_damage_taken"]
+[connection signal="move_to_position" from="." to="StateMachine/GhostEnemyMove" method="_on_ghost_enemy_move_to_position"]
+[connection signal="state_change" from="." to="StateMachine" method="on_child_transitioned"]
+[connection signal="animation_finished" from="GhostAnimatedSprite2D" to="." method="_on_animation_finished"]
+[connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
+[connection signal="body_exited" from="Detection" to="." method="_on_detection_body_exited"]
+[connection signal="animation_change" from="StateMachine/GhostEnemyIdle" to="." method="animation_change"]
+[connection signal="animation_change" from="StateMachine/GhostEnemyAttackStart" to="." method="animation_change"]
+[connection signal="animation_change" from="StateMachine/GhostEnemyBack" to="." method="animation_change"]
+[connection signal="check" from="StateMachine/GhostEnemyBack" to="." method="_on_ghost_enemy_back_check"]
+[connection signal="transition" from="StateMachine/GhostEnemyBack" to="StateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="StateMachine/GhostEnemyStun" to="." method="animation_change"]
+[connection signal="check" from="StateMachine/GhostEnemyStun" to="." method="_on_ghost_enemy_back_check"]
+[connection signal="timeout" from="StateMachine/GhostEnemyStun/StunAnimationTimer" to="StateMachine/GhostEnemyStun" method="_on_stun_animation_timer_timeout"]
+[connection signal="transition" from="StateMachine/GhostEnemyMove" to="StateMachine" method="on_child_transitioned"]
+[connection signal="animation_change" from="StateMachine/GhostEnemyWait" to="." method="animation_change"]
+[connection signal="transition" from="StateMachine/GhostEnemyWait" to="StateMachine" method="on_child_transitioned"]
+[connection signal="body_entered" from="Attack_Hitbox" to="." method="_on_attack_hitbox_body_entered"]
+[connection signal="state_change" from="HealthComponent" to="StateMachine" method="on_child_transitioned"]
+[connection signal="timeout" from="LightCheckTimer" to="StateMachine/GhostEnemyWait" method="_on_light_check_timer_timeout"]

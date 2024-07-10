@@ -1,0 +1,413 @@
+[gd_scene load_steps=24 format=3 uid="uid://cdhggc8rqpeur"]
+
+[ext_resource type="Script" path="res://Enemies/WizardEnemy/green_wizard_enemy.gd" id="1_clgae"]
+[ext_resource type="Texture2D" uid="uid://beumdgf64chvf" path="res://art/enemies/GreenWizardIdle.png" id="2_xjjsn"]
+[ext_resource type="PackedScene" uid="uid://cd54xaw2kx1kw" path="res://state_machine.tscn" id="3_qjvrn"]
+[ext_resource type="Script" path="res://Enemies/WizardEnemy/WizardIdleState.gd" id="4_uraiw"]
+[ext_resource type="Script" path="res://Enemies/WizardEnemy/WizardAttackState.gd" id="5_s8gac"]
+[ext_resource type="Script" path="res://Enemies/WizardEnemy/WizardUnseen.gd" id="6_jjpj3"]
+[ext_resource type="Script" path="res://World/Barrier.gd" id="7_0nxsn"]
+[ext_resource type="Texture2D" uid="uid://plmr6qb2ni3b" path="res://art/enemies/GreenWizardHead.png" id="7_l7475"]
+[ext_resource type="Texture2D" uid="uid://dlxtv4hxjthks" path="res://art/enemies/GreenWizardAttack.png" id="8_5vri0"]
+[ext_resource type="Texture2D" uid="uid://doe4is0mrpqa6" path="res://art/other/GreenBarier.png" id="8_pmn4h"]
+[ext_resource type="Texture2D" uid="uid://b1pyalcfii2n8" path="res://art/enemies/GreenWizardDeath.png" id="11_youkt"]
+[ext_resource type="AudioStream" uid="uid://wfoids2tow05" path="res://art/sounds/WizardDeath.wav" id="12_tmpv7"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tci85"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0rkms"]
+radius = 24.0
+
+[sub_resource type="Gradient" id="Gradient_jy2xu"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6cfe2"]
+gradient = SubResource("Gradient_jy2xu")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_yed5q"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_16ec0"]
+gradient = SubResource("Gradient_yed5q")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_4qhgu"]
+resource_name = "Attack"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WizardSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_5vri0")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WizardSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WizardSprite:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_wod1p"]
+resource_name = "Idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WizardSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_xjjsn")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WizardSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WizardSprite:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_y1yht"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WizardSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_xjjsn")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WizardSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WizardSprite:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [7]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CPUParticles2D:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Head:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Head:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-9, 3)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Head:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_oxtss"]
+resource_name = "death"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WizardSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_youkt")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WizardSprite:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WizardSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 1.1, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Head:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CPUParticles2D:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Head:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.3, 1.4, 1.5, 1.6, 1.7, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-9, 4), Vector2(-5, 1), Vector2(-1, 5), Vector2(1, 12), Vector2(2, 17), Vector2(2, 21)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Head:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(1.3, 1.4, 1.5, 1.6, 1.7, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.350811, 0.98262, 1.26362, 1.26362, 1.40324]
+}
+tracks/7/type = "audio"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Death")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("12_tmpv7")
+}],
+"times": PackedFloat32Array(1.3)
+}
+tracks/7/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u8wil"]
+_data = {
+"Attack": SubResource("Animation_4qhgu"),
+"Idle": SubResource("Animation_wod1p"),
+"RESET": SubResource("Animation_y1yht"),
+"death": SubResource("Animation_oxtss")
+}
+
+[node name="GreenWizardEnemy" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 3
+script = ExtResource("1_clgae")
+
+[node name="WEHitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WEHitbox"]
+position = Vector2(0, 10)
+shape = SubResource("CapsuleShape2D_tci85")
+
+[node name="WizardSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_xjjsn")
+hframes = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 10)
+shape = SubResource("CapsuleShape2D_tci85")
+
+[node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("3_qjvrn")]
+current_state = NodePath("WizardUnseen")
+
+[node name="WizardIdle" type="Node" parent="StateMachine"]
+script = ExtResource("4_uraiw")
+
+[node name="AttackTimer" type="Timer" parent="StateMachine/WizardIdle"]
+one_shot = true
+
+[node name="WizardAttack" type="Node" parent="StateMachine"]
+script = ExtResource("5_s8gac")
+
+[node name="WizardUnseen" type="Node" parent="StateMachine"]
+script = ExtResource("6_jjpj3")
+
+[node name="Head" type="Sprite2D" parent="."]
+position = Vector2(-9, 3)
+texture = ExtResource("7_l7475")
+
+[node name="Barrier" type="StaticBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, 10)
+collision_layer = 8
+script = ExtResource("7_0nxsn")
+
+[node name="Sprite2D" type="Sprite2D" parent="Barrier"]
+texture = ExtResource("8_pmn4h")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier"]
+shape = SubResource("CircleShape2D_0rkms")
+
+[node name="Light" type="PointLight2D" parent="Barrier"]
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+range_layer_min = -1
+shadow_color = Color(0.00392157, 0.0235294, 0, 1)
+texture = SubResource("GradientTexture2D_6cfe2")
+texture_scale = 0.2
+
+[node name="Shadow" type="PointLight2D" parent="Barrier"]
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_color = Color(0, 0.0901961, 0, 0)
+texture = SubResource("GradientTexture2D_16ec0")
+texture_scale = 0.2
+
+[node name="WizardAnimation" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_u8wil")
+}
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2(-9, 10)
+emitting = false
+amount = 32
+lifetime = 0.7
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, 490)
+initial_velocity_max = 200.0
+color = Color(1, 0, 0, 1)
+
+[node name="Death" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+volume_db = 10.0
+bus = &"SFX"
+
+[connection signal="state_change" from="." to="StateMachine" method="on_child_transitioned"]
+[connection signal="transition" from="StateMachine/WizardIdle" to="StateMachine" method="on_child_transitioned"]
+[connection signal="timeout" from="StateMachine/WizardIdle/AttackTimer" to="StateMachine/WizardIdle" method="_on_attack_timer_timeout"]
+[connection signal="transition" from="StateMachine/WizardAttack" to="StateMachine" method="on_child_transitioned"]
+[connection signal="transition" from="StateMachine/WizardUnseen" to="StateMachine" method="on_child_transitioned"]
+[connection signal="animation_finished" from="WizardAnimation" to="." method="_on_wizard_animation_animation_finished"]

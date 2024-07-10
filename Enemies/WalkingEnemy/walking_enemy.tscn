@@ -1,0 +1,332 @@
+[gd_scene load_steps=19 format=3 uid="uid://eygu14cajdrk"]
+
+[ext_resource type="Script" path="res://Enemies/WalkingEnemy/walking_enemy.gd" id="1_0ofef"]
+[ext_resource type="Shader" path="res://Enemies/GhostEnemy/ghost.gdshader" id="2_0senj"]
+[ext_resource type="Texture2D" uid="uid://d12er3eawa0oo" path="res://art/enemies/WalkingCharacterWalk.png" id="2_5yl1t"]
+[ext_resource type="Texture2D" uid="uid://bxcwfueltvmry" path="res://art/enemies/WalkingCharacterEyes.png" id="4_ang8g"]
+[ext_resource type="Shader" path="res://Enemies/WalkingEnemy/no_light.gdshader" id="4_vgq1c"]
+[ext_resource type="PackedScene" uid="uid://cd54xaw2kx1kw" path="res://state_machine.tscn" id="5_3m4si"]
+[ext_resource type="Texture2D" uid="uid://dmbsuymo37jfg" path="res://art/enemies/WalkingCharacterAttack.png" id="5_4h6xl"]
+[ext_resource type="Script" path="res://Enemies/WalkingEnemy/WalkingCharacterWalkState.gd" id="8_svslj"]
+[ext_resource type="Script" path="res://Enemies/WalkingEnemy/WalkingCharacterAttackState.gd" id="9_ud7cn"]
+[ext_resource type="Script" path="res://Enemies/WalkingEnemy/WalkingCharacterStunState.gd" id="10_am8n2"]
+[ext_resource type="AudioStream" uid="uid://c8dmhofxhiwi5" path="res://art/sounds/WalkingCharacterHit.wav" id="11_anuvg"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hpneq"]
+radius = 8.0
+height = 28.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pj7um"]
+resource_local_to_scene = true
+shader = ExtResource("2_0senj")
+shader_parameter/stunned = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_37ll0"]
+shader = ExtResource("4_vgq1c")
+
+[sub_resource type="Animation" id="Animation_lkjkd"]
+resource_name = "Attack"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Position/Eyes:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Position/WalkingEnemySprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_4h6xl")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Position/WalkingEnemySprite:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [12]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Position/WalkingEnemySprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Position/Attack/AttackHitbox:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.3, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:speed")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 100]
+}
+
+[sub_resource type="Animation" id="Animation_i0my7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("Position/WalkingEnemySprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath("Position/Eyes:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Position/WalkingEnemySprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_5yl1t")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Position/WalkingEnemySprite:hframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Position/Attack/AttackHitbox:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:speed")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [100]
+}
+
+[sub_resource type="Animation" id="Animation_pclqy"]
+resource_name = "Walk"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Position/WalkingEnemySprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Position/Eyes:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Position/WalkingEnemySprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_5yl1t")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Position/WalkingEnemySprite:hframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7dhyw"]
+_data = {
+"Attack": SubResource("Animation_lkjkd"),
+"RESET": SubResource("Animation_i0my7"),
+"Walk": SubResource("Animation_pclqy")
+}
+
+[node name="WalkingEnemy" type="CharacterBody2D"]
+position = Vector2(245, -11)
+script = ExtResource("1_0ofef")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_hpneq")
+
+[node name="WCHitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WCHitbox"]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_hpneq")
+
+[node name="Position" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="FloorDetection" type="RayCast2D" parent="Position"]
+unique_name_in_owner = true
+position = Vector2(-8, 12)
+target_position = Vector2(0, 28)
+collision_mask = 4
+collide_with_areas = true
+
+[node name="WalkingEnemySprite" type="Sprite2D" parent="Position"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_pj7um")
+texture = ExtResource("2_5yl1t")
+hframes = 8
+
+[node name="Eyes" type="Sprite2D" parent="Position"]
+material = SubResource("ShaderMaterial_37ll0")
+position = Vector2(-2, 2.5)
+texture = ExtResource("4_ang8g")
+hframes = 8
+
+[node name="Attack" type="Area2D" parent="Position"]
+unique_name_in_owner = true
+position = Vector2(-2, 3)
+
+[node name="AttackHitbox" type="CollisionPolygon2D" parent="Position/Attack"]
+unique_name_in_owner = true
+polygon = PackedVector2Array(0, 0, -22, -11, -28, 10, -25, 23)
+
+[node name="Detection" type="Area2D" parent="Position"]
+unique_name_in_owner = true
+position = Vector2(-2, 3)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Position/Detection"]
+polygon = PackedVector2Array(0, 0, -22, -11, -28, 10, -25, 23)
+
+[node name="WallDetection" type="RayCast2D" parent="Position"]
+unique_name_in_owner = true
+position = Vector2(0, 10)
+target_position = Vector2(-12, 0)
+collision_mask = 4
+
+[node name="WalkingCharacterAnimation" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_7dhyw")
+}
+
+[node name="StateMachine" parent="." node_paths=PackedStringArray("current_state") instance=ExtResource("5_3m4si")]
+current_state = NodePath("WalkingCharacterWalk")
+
+[node name="WalkingCharacterWalk" type="Node" parent="StateMachine"]
+script = ExtResource("8_svslj")
+
+[node name="WalkingCharacterAttack" type="Node" parent="StateMachine"]
+script = ExtResource("9_ud7cn")
+
+[node name="WalkingCharacterStun" type="Node" parent="StateMachine"]
+script = ExtResource("10_am8n2")
+
+[node name="WCStunAnimationTimer" type="Timer" parent="StateMachine/WalkingCharacterStun"]
+unique_name_in_owner = true
+wait_time = 0.25
+
+[node name="WCDamageTakenTimer" type="Timer" parent="StateMachine/WalkingCharacterStun"]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
+[node name="WalkingEnemyHit" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("11_anuvg")
+bus = &"SFX"
+
+[connection signal="state_change" from="." to="StateMachine" method="on_child_transitioned"]
+[connection signal="body_entered" from="Position/Detection" to="." method="_on_detection_body_entered"]
+[connection signal="animation_finished" from="WalkingCharacterAnimation" to="." method="_on_walking_character_animation_animation_finished"]
+[connection signal="transition" from="StateMachine/WalkingCharacterStun" to="StateMachine" method="on_child_transitioned"]
+[connection signal="timeout" from="StateMachine/WalkingCharacterStun/WCStunAnimationTimer" to="StateMachine/WalkingCharacterStun" method="_on_wc_stun_animation_timer_timeout"]
+[connection signal="timeout" from="StateMachine/WalkingCharacterStun/WCDamageTakenTimer" to="StateMachine/WalkingCharacterStun" method="_on_wc_damage_taken_timer_timeout"]

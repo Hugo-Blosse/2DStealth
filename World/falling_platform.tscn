@@ -1,0 +1,171 @@
+[gd_scene load_steps=22 format=3 uid="uid://sp8wtgvc7pfn"]
+
+[ext_resource type="Texture2D" uid="uid://dh83qvet37ee3" path="res://art/other/FallingBrickPlatform.png" id="1_qgumu"]
+[ext_resource type="Script" path="res://World/falling_platform.gd" id="2_jjp8t"]
+[ext_resource type="Script" path="res://World/FallingPlatformCollision.gd" id="3_pjdgi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8gle"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(0, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8n4n0"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(64, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ggmbu"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(128, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fofxp"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(192, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4u1e"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(256, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2rlh"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(320, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qdp48"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(384, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3j6n3"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(0, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hihlo"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(384, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ajkgx"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(320, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1el5"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(256, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iaulf"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(192, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dyyfy"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(128, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wsp2h"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(64, 0, 64, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5isu4"]
+atlas = ExtResource("1_qgumu")
+region = Rect2(0, 0, 64, 7)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4tf0c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h8gle")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8n4n0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ggmbu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fofxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r4u1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2rlh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qdp48")
+}],
+"loop": false,
+"name": &"break",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3j6n3")
+}],
+"loop": false,
+"name": &"default",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hihlo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ajkgx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a1el5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iaulf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dyyfy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wsp2h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5isu4")
+}],
+"loop": false,
+"name": &"rebuild",
+"speed": 2.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_itsi4"]
+size = Vector2(64, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m2bu3"]
+size = Vector2(64, 5)
+
+[node name="FallingPlatform" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_4tf0c")
+autoplay = "default"
+script = ExtResource("2_jjp8t")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="FallingPlatformCollision" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_itsi4")
+script = ExtResource("3_pjdgi")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_m2bu3")
+
+[node name="FallTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RebuildTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+collision_layer = 64
+
+[node name="FallingPlatformCollision" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_itsi4")
+
+[connection signal="animation_finished" from="." to="StaticBody2D/FallingPlatformCollision" method="_on_falling_platform_animation_finished"]
+[connection signal="enable" from="StaticBody2D/FallingPlatformCollision" to="." method="_on_falling_platform_collision_enable"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="FallTimer" to="." method="_on_fall_timer_timeout"]
+[connection signal="timeout" from="RebuildTimer" to="." method="_on_rebuild_timer_timeout"]

@@ -1,0 +1,158 @@
+[gd_scene load_steps=4 format=3 uid="uid://daewyf7q1v4f2"]
+
+[sub_resource type="GDScript" id="GDScript_hklug"]
+script/source = "extends Node2D
+
+var start_scrolling : bool = false
+
+func _ready():
+	$CreditsTimer.start()
+
+func _process(delta):
+	if $Node2D.position.y <= -890 && $FinalTimer.is_stopped():
+		$FinalTimer.start()
+	if start_scrolling && $Node2D.position.y > -900:
+		$Node2D.position.y -= 20 * delta
+
+func _on_credits_timer_timeout():
+	start_scrolling = true
+
+func _quit():
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		get_tree().quit()
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mtced"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yr75g"]
+
+[node name="Credits" type="Node2D"]
+script = SubResource("GDScript_hklug")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -135.0
+offset_right = 240.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Node2D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -188.5
+offset_top = -35.0
+offset_right = 188.5
+offset_bottom = 908.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 30
+text = "CONGRATULATIONS!
+YOU WIN!!!"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 300
+theme_override_styles/separator = SubResource("StyleBoxEmpty_mtced")
+
+[node name="Label2" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "CREDITS:"
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_yr75g")
+
+[node name="Label4" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 3
+text = "Game Design:"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+text = "Hugo-Blosse"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 3
+text = "Graphics:"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+text = "Hugo-Blosse"
+horizontal_alignment = 1
+
+[node name="Label7" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 3
+text = "Audio:"
+horizontal_alignment = 1
+
+[node name="Label8" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+text = "Hugo-Blosse"
+horizontal_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 300
+theme_override_styles/separator = SubResource("StyleBoxEmpty_mtced")
+
+[node name="Label9" type="Label" parent="Node2D/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 30
+text = "THANK YOU FOR PLAYING"
+horizontal_alignment = 1
+
+[node name="CreditsTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="FinalTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="timeout" from="CreditsTimer" to="." method="_on_credits_timer_timeout"]
+[connection signal="timeout" from="FinalTimer" to="." method="_quit"]

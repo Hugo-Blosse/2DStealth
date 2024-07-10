@@ -1,0 +1,394 @@
+[gd_scene load_steps=24 format=3 uid="uid://bp8uj5qs6vutb"]
+
+[ext_resource type="Script" path="res://Options & UI/MainMenu.gd" id="1_ybp4p"]
+[ext_resource type="Shader" path="res://Enemies/WalkingEnemy/no_light.gdshader" id="2_1xqsc"]
+[ext_resource type="PackedScene" uid="uid://bvmbn6uh3jl7t" path="res://Options & UI/options.tscn" id="2_hyvrb"]
+[ext_resource type="Texture2D" uid="uid://du6nu7ftve7hx" path="res://art/player_art/VoidCharacterIdle.png" id="3_do5bu"]
+[ext_resource type="Texture2D" uid="uid://bk7j2jwo6lbe3" path="res://art/player_art/VoidCharacterDeath2_teleport.png" id="4_lx5s5"]
+[ext_resource type="Texture2D" uid="uid://beumdgf64chvf" path="res://art/enemies/GreenWizardIdle.png" id="5_2scl1"]
+[ext_resource type="Texture2D" uid="uid://d12er3eawa0oo" path="res://art/enemies/WalkingCharacterWalk.png" id="6_knowb"]
+[ext_resource type="Texture2D" uid="uid://d2oueeqn3igo" path="res://art/enemies/GhostIdle.png" id="7_ye6ya"]
+[ext_resource type="Texture2D" uid="uid://rxr10ggxm2q4" path="res://art/other/DarkBricksTile.png" id="9_qkj2x"]
+[ext_resource type="AudioStream" uid="uid://c5xqxxqnrn1j" path="res://art/sounds/Music.wav" id="10_pgpqe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p2xhr"]
+shader = ExtResource("2_1xqsc")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gtgf0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w5s0b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lyria"]
+
+[sub_resource type="Gradient" id="Gradient_85jxt"]
+offsets = PackedFloat32Array(0, 0.668831)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ortw"]
+gradient = SubResource("Gradient_85jxt")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_yi7aa"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_auova"]
+gradient = SubResource("Gradient_yi7aa")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_brflt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Player:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MarginContainer/Ghost:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MarginContainer/GreenWizard:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MarginContainer/WalkingEnemy:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2monk"]
+resource_name = "start"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/Player:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MarginContainer/Ghost:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MarginContainer/GreenWizard:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MarginContainer/WalkingEnemy:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o8tw5"]
+_data = {
+"RESET": SubResource("Animation_brflt"),
+"start": SubResource("Animation_2monk")
+}
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fcx3y"]
+texture = ExtResource("9_qkj2x")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_fsm28"]
+sources/0 = SubResource("TileSetAtlasSource_fcx3y")
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_ybp4p")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 480.0
+offset_bottom = 270.0
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MarginContainer"]
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer"]
+z_index = -1
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="MarginContainer"]
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/CanvasLayer"]
+material = SubResource("ShaderMaterial_p2xhr")
+offset_right = 480.0
+offset_bottom = 270.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CanvasLayer/MarginContainer2"]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "VOID CREATURE ADVENTURE"
+horizontal_alignment = 1
+
+[node name="PHBoxContainer" type="HBoxContainer" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="StartButton" type="Button" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/PHBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_hover_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_focus_color = Color(0.839216, 0.698039, 0.898039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_gtgf0")
+text = "START"
+flat = true
+
+[node name="OHBoxContainer" type="HBoxContainer" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="OptionsButton" type="Button" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/OHBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_hover_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_focus_color = Color(0.839216, 0.698039, 0.898039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_w5s0b")
+action_mode = 0
+text = "OPTIONS"
+flat = true
+
+[node name="EHBoxContainer" type="HBoxContainer" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+alignment = 1
+
+[node name="ExitButton" type="Button" parent="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/EHBoxContainer"]
+use_parent_material = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.462745, 0.258824, 0.541176, 1)
+theme_override_colors/font_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_hover_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_focus_color = Color(0.839216, 0.698039, 0.898039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.67451, 0.439216, 0.764706, 1)
+theme_override_colors/font_outline_color = Color(0.843137, 0.482353, 0.729412, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lyria")
+text = "EXIT"
+flat = true
+
+[node name="Player" type="Sprite2D" parent="MarginContainer"]
+z_index = 1
+position = Vector2(91, 148)
+scale = Vector2(3, 3)
+texture = ExtResource("3_do5bu")
+hframes = 2
+
+[node name="Light" type="PointLight2D" parent="MarginContainer/Player"]
+scale = Vector2(3, 3)
+color = Color(0.807843, 0.568627, 1, 1)
+energy = 1.3
+range_layer_min = -1
+shadow_filter = 1
+shadow_filter_smooth = 3.0
+texture = SubResource("GradientTexture2D_4ortw")
+texture_scale = 0.3
+
+[node name="Shadow" type="PointLight2D" parent="MarginContainer/Player"]
+scale = Vector2(3, 3)
+color = Color(0.807843, 0.568627, 1, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 3.0
+texture = SubResource("GradientTexture2D_4ortw")
+texture_scale = 0.3
+
+[node name="Sprite2D" type="Sprite2D" parent="MarginContainer/Player"]
+z_index = -1
+position = Vector2(0, 1)
+texture = ExtResource("4_lx5s5")
+hframes = 8
+frame = 7
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="GreenWizard" type="Sprite2D" parent="MarginContainer"]
+position = Vector2(437, 165)
+scale = Vector2(3, 3)
+texture = ExtResource("5_2scl1")
+hframes = 2
+
+[node name="WalkingEnemy" type="Sprite2D" parent="MarginContainer"]
+position = Vector2(340, 160)
+scale = Vector2(3, 3)
+texture = ExtResource("6_knowb")
+hframes = 8
+
+[node name="Ghost" type="Sprite2D" parent="MarginContainer"]
+position = Vector2(357, 99)
+scale = Vector2(-3, 3)
+texture = ExtResource("7_ye6ya")
+hframes = 8
+
+[node name="Shadow" type="PointLight2D" parent="MarginContainer/Ghost"]
+scale = Vector2(2, 2)
+color = Color(0.647059, 1, 0.262745, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_color = Color(0, 0.0901961, 0, 0)
+texture = SubResource("GradientTexture2D_auova")
+
+[node name="Light" type="PointLight2D" parent="MarginContainer/Ghost"]
+scale = Vector2(2, 2)
+color = Color(0.647059, 1, 0.262745, 1)
+range_layer_min = -1
+shadow_color = Color(0.160784, 0.345098, 0, 1)
+texture = SubResource("GradientTexture2D_auova")
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="MarginContainer"]
+
+[node name="OptionsMenu" parent="MarginContainer/CanvasLayer2" instance=ExtResource("2_hyvrb")]
+visible = false
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="MenuAnimation" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_o8tw5")
+}
+autoplay = "start"
+
+[node name="TileMap" type="TileMap" parent="."]
+z_index = -1
+scale = Vector2(3, 3)
+tile_set = SubResource("TileSet_fsm28")
+format = 2
+layer_0/tile_data = PackedInt32Array(196608, 0, 0, 262144, 0, 1, 196609, 65536, 0, 262145, 65536, 1, 196610, 131072, 0, 262146, 131072, 1, 262150, 0, 3, 327686, 0, 4, 262151, 65536, 3, 327687, 65536, 4, 262152, 65536, 3, 327688, 65536, 4, 262153, 131072, 3, 327689, 131072, 4)
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("10_pgpqe")
+autoplay = true
+bus = &"Music"
+
+[connection signal="pressed" from="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/PHBoxContainer/StartButton" to="." method="start_game"]
+[connection signal="pressed" from="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/OHBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MarginContainer/CanvasLayer/MarginContainer2/VBoxContainer/EHBoxContainer/ExitButton" to="." method="_quit"]

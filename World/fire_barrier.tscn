@@ -1,0 +1,123 @@
+[gd_scene load_steps=13 format=3 uid="uid://cjj820crx2rv5"]
+
+[ext_resource type="Script" path="res://World/FireBarrier.gd" id="1_vb3e5"]
+[ext_resource type="Texture2D" uid="uid://c1goil2ilnswm" path="res://art/other/ProtectiveFireEmpty.png" id="2_x1qy5"]
+[ext_resource type="Texture2D" uid="uid://dio2u520w6r3w" path="res://art/other/ProtectiveFire.png" id="3_757pj"]
+[ext_resource type="Script" path="res://World/Barrier.gd" id="3_emkjm"]
+[ext_resource type="Texture2D" uid="uid://doe4is0mrpqa6" path="res://art/other/GreenBarier.png" id="5_3w11q"]
+
+[sub_resource type="Gradient" id="Gradient_4jdrm"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dag2w"]
+gradient = SubResource("Gradient_4jdrm")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ytd65"]
+radius = 5.0
+height = 20.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ageaj"]
+radius = 24.0
+
+[sub_resource type="Animation" id="Animation_0d8jf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ProtectiveFire:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_hdamt"]
+resource_name = "animation"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ProtectiveFire:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2rqie"]
+_data = {
+"RESET": SubResource("Animation_0d8jf"),
+"animation": SubResource("Animation_hdamt")
+}
+
+[node name="FireBarrier" type="Area2D"]
+collision_mask = 9
+script = ExtResource("1_vb3e5")
+
+[node name="ProtectiveFireEmpty" type="Sprite2D" parent="."]
+position = Vector2(0, -17)
+texture = ExtResource("2_x1qy5")
+
+[node name="ProtectiveFire" type="Sprite2D" parent="."]
+position = Vector2(0, -17)
+texture = ExtResource("3_757pj")
+hframes = 5
+
+[node name="Shadow" type="PointLight2D" parent="ProtectiveFire"]
+position = Vector2(0, 9)
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_color = Color(0, 0.0901961, 0, 0)
+texture = SubResource("GradientTexture2D_dag2w")
+texture_scale = 0.2
+
+[node name="Light" type="PointLight2D" parent="ProtectiveFire"]
+position = Vector2(0, 9)
+scale = Vector2(3.45, 3.45)
+color = Color(0.647059, 1, 0.262745, 1)
+range_layer_min = -1
+shadow_color = Color(0.00392157, 0.0235294, 0, 1)
+texture = SubResource("GradientTexture2D_dag2w")
+texture_scale = 0.2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("CapsuleShape2D_ytd65")
+
+[node name="Barrier" type="StaticBody2D" parent="."]
+position = Vector2(0, -8)
+collision_mask = 8
+script = ExtResource("3_emkjm")
+
+[node name="Sprite2D" type="Sprite2D" parent="Barrier"]
+texture = ExtResource("5_3w11q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Barrier"]
+shape = SubResource("CircleShape2D_ageaj")
+
+[node name="BarrierTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2rqie")
+}
+autoplay = "animation"
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+
+[connection signal="timeout" from="BarrierTimer" to="." method="_on_barrier_timer_timeout"]
+[connection signal="screen_entered" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_entered"]

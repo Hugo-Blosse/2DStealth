@@ -1,0 +1,101 @@
+[gd_scene load_steps=13 format=3 uid="uid://bqg6ulynci1fj"]
+
+[ext_resource type="Texture2D" uid="uid://dm60uasl2kt85" path="res://art/other/GreenFireAnimation.png" id="1_l43kg"]
+[ext_resource type="Script" path="res://World/GreenFire.gd" id="2_tt1ee"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tf0dl"]
+atlas = ExtResource("1_l43kg")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ktss"]
+atlas = ExtResource("1_l43kg")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbxfh"]
+atlas = ExtResource("1_l43kg")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_st80t"]
+atlas = ExtResource("1_l43kg")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7352"]
+atlas = ExtResource("1_l43kg")
+region = Rect2(64, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7n3qg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tf0dl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ktss")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wbxfh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_st80t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7352")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2mndh"]
+size = Vector2(16, 16)
+
+[sub_resource type="Gradient" id="Gradient_odl6r"]
+offsets = PackedFloat32Array(0, 0.720779)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n154a"]
+gradient = SubResource("Gradient_odl6r")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g6ave"]
+radius = 23.0
+
+[node name="GreenFire" type="AnimatedSprite2D"]
+position = Vector2(176, -26)
+sprite_frames = SubResource("SpriteFrames_7n3qg")
+autoplay = "default"
+frame_progress = 0.364352
+script = ExtResource("2_tt1ee")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_2mndh")
+
+[node name="Shadow" type="PointLight2D" parent="."]
+position = Vector2(-0.5, -9)
+scale = Vector2(0.72, 0.72)
+color = Color(0.647059, 1, 0.262745, 1)
+energy = 0.7
+range_layer_min = -1
+shadow_enabled = true
+shadow_color = Color(0, 0.0901961, 0, 0)
+texture = SubResource("GradientTexture2D_n154a")
+
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(-0.5, -9)
+scale = Vector2(0.72, 0.72)
+color = Color(0.647059, 1, 0.262745, 1)
+range_layer_min = -1
+shadow_color = Color(0.160784, 0.345098, 0, 1)
+texture = SubResource("GradientTexture2D_n154a")
+
+[node name="Detection" type="Area2D" parent="."]
+position = Vector2(-0.5, -9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detection"]
+shape = SubResource("CircleShape2D_g6ave")
+
+[connection signal="body_entered" from="Detection" to="." method="_on_detection_body_entered"]
