@@ -14,12 +14,14 @@
 ### Prerequisites
 Option 1:
 - Download game from this [link](https://drive.google.com/file/d/1-AEVLgFi02r8Z0OfjxLMdm1_wfEdHzYi/view?usp=drivesdk)
+
 Option 2:
 - Download and install [Godot Engine](https://godotengine.org/) (Version 3.5+ or 4.x recommended)
 
 ### Running the Game
 Option 1:
 - Open Void-Creature-Adventure.exe
+
 Option 2:
 1. Clone or download this repository:
    ```bash
